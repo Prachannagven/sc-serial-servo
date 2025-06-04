@@ -24,7 +24,7 @@ from STservo_sdk import *                 # Uses STServo SDK library
 # Settings
 DEVICENAME = 'COM13'      # Replace with your actual port
 OLD_BAUDRATE = 57600    # Current servo baudrate
-NEW_BAUDRATE_CODE = 7     # STS_38400
+NEW_BAUDRATE_CODE = 6     # STS_38400
 SERVO_ID = 1              # Target servo ID
 
 # Initialize port and packet handler
