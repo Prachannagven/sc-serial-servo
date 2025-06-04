@@ -8,3 +8,10 @@ This repo has two sections, the python one and the arduino one. The python code 
 
 # Setting Up
 After installing the python library, run the "changing baud rate" code on the board. It will subseqently become much more feasible to deal with.
+
+## The Python Script
+The file for this step is located in STServo_Python/STServo_Python/stservo-env/myscripts, and it's called "change_baud_rate". Scroll down, and then find the code blocked labelled "settings". For DEVICENAME, find out the COM port that you're communicating on with the adaptor board. Plug that in in the same format as the example. 
+
+Now, if you're just starting out, you can set the "OLD_BAUDRATE" to 1000000, which is the default of the motor. From there, you can set the "NEW_BAUDRATE_CODE" according to what you'd like. I'd suggest 57600, corresponding to storing 0x06 in the appropriate register. Additionally, if for some reason you have a different servo ID here, you can update that.
+
+After saving the file, you can run it and it should say that communication was successful. Don't worry if it says "failed to set baud rate", that's a glitch I'm still working out.
