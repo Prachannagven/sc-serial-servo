@@ -18,7 +18,7 @@ All the best!
 //The default servo baud rate is 1000000. However, SoftwareSerial isn't capable of handling that. You have to drop the baud rate using the python code
 //Python code is also in the github, don't set baud rate to 76800 because the python code doesn't like that
 //Software serial caps out at around 50000 baud rate, so don't necessarily go higher than that.
-#define SERVO_BAUD_RATE 57600
+#define SERVO_BAUD_RATE 38400
 
 //Servo ID is by default 0x01, you can edit it as you please
 const byte SERVO_ID = 0x01;
