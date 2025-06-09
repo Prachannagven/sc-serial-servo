@@ -22,7 +22,7 @@ void setup() {
   
   /*
   //unlockEEPROM(SERVO_ID);
-  byte addr = 0x2A;
+  byte addr = 0x2A;/
   byte params[] = {0x00, 0x00};
   writeData(0x02, addr, params, sizeof(params));
   //lockEEPROM(SERVO_ID);
