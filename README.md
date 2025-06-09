@@ -15,3 +15,14 @@ The file for this step is located in STServo_Python/STServo_Python/stservo-env/m
 Now, if you're just starting out, you can set the "OLD_BAUDRATE" to 1000000, which is the default of the motor. From there, you can set the "NEW_BAUDRATE_CODE" according to what you'd like. I'd suggest 57600, corresponding to storing 0x06 in the appropriate register. Additionally, if for some reason you have a different servo ID here, you can update that.
 
 After saving the file, you can run it and it should say that communication was successful. Don't worry if it says "failed to set baud rate", that's a glitch I'm still working out.
+
+## Running Some Scripts
+You can now navigate to the C folder where some basic code exists to control the motor. Your first exercise would be to ping using the Arduino IDE. If this works you can go ahead and use similar code to send whatever you'd like.
+
+# The structure of the SC/ST Series Servos
+These serial servos basically work using an internal bank of registers. To manipulate them, you need to change the values of those registers. The lookup table for the registers can be found in the folder marked "additional documents". While you might thing turning the motor is the easiest thng you can do, something more appropriate might be reading the temperature (yes this motor has a temperature sensor) from the motor.
+
+Once you have all this, you can work on writing to the motor.
+
+## Locking a Register
+These motors have a lot of quantities you would want to change and maintain even when power is turned off (for example, the motor ID). In order to retain information even when power is lost, you need to first unlock the eeprom, write your desired data, then lock the eeprom again. I had some trouble doing this at first, but I'll update the problems I had and how I fixed them as and when I do.
