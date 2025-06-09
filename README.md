@@ -1,7 +1,7 @@
 # ⚙️ The Servo Motors from Hell  
 _(This is not slander. Just raw truth.)_
 
-The SC and ST series serial servos are **powerful**, **high-torque**, and **painfully finicky** to control. They're fantastic hardware-wise — but oh boy, their software setup is something else. Out of the box, they come configured to operate at a painful **1,000,000 baud rate**. Sure, most microcontrollers *can* handle that. But at that speed, **timing becomes a serious issue**, especially if you (like me) started with using an Arduion Uno with the `SoftwareSerial.h` library to communicate.
+The SC and ST series serial servos are **powerful**, **high-torque**, and **painfully finicky** to control. They're fantastic hardware-wise — but their software setup is something else. Out of the box, they come configured to operate at a painful **1,000,000 baud rate**. Sure, most microcontrollers *can* handle that. But at that speed, **timing becomes a serious issue**, especially if you (like me) started with using an Arduion Uno with the `SoftwareSerial.h` library to communicate.
 
 You can't just grab an Arduino Uno and start debugging like it's a weekend project — oh no. You need to **first drop the baud rate** and **then** control them using your microcontroller like a sane person.
 
