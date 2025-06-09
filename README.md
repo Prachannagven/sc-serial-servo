@@ -14,7 +14,7 @@ The file for this step is located in STServo_Python/STServo_Python/stservo-env/m
 
 Now, if you're just starting out, you can set the "OLD_BAUDRATE" to 1000000, which is the default of the motor. From there, you can set the "NEW_BAUDRATE_CODE" according to what you'd like. I'd suggest 57600, corresponding to storing 0x06 in the appropriate register. Additionally, if for some reason you have a different servo ID here, you can update that.
 
-After saving the file, you can run it and it should say that communication was successful. Don't worry if it says "failed to set baud rate", that's a glitch I'm still working out.
+After saving the file, you can run it and it should say that communication was successful. Don't worry if it says "failed to set baud rate", that's a glitch I'm still working out. (**Edit:** Turns out I was powering my board with 12V rather than the ideal voltage of 9V, which is why it kept dying. For context as to how I found out, I looked at the error byte that was sent back with the data and backtracked it using the datasheet)
 
 ## Running Some Scripts
 You can now navigate to the C folder where some basic code exists to control the motor. Your first exercise would be to ping using the Arduino IDE. If this works you can go ahead and use similar code to send whatever you'd like.
