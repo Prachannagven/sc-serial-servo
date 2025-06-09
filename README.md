@@ -1,28 +1,100 @@
-# The Servo Motors from Hell
-(This is not slander)
-The SC and ST series serial servos, are an absolute piece of madness. They are extremely high quality and high torque serial servos, but my god is it pain to control them. They come default packed to operate at a whopping 1,000,000 baud rate. While most microcontrollers _can_ handle that, you enter the region where timing is now a problem.
+# ⚙️ The Servo Motors from Hell  
+_(This is not slander. Just raw truth.)_
 
-You cannot just take an Uno and debug it to make it work, no no no, you have to change the baud rate to a lower value (using the memor table) and then finally be able to control it with a micro controller.
+The SC and ST series serial servos are **powerful**, **high-torque**, and **painfully finicky** to control. They're fantastic hardware-wise — but oh boy, their software setup is something else. Out of the box, they come configured to operate at a painful **1,000,000 baud rate**. Sure, most microcontrollers *can* handle that. But at that speed, **timing becomes a serious issue**, especially if you (like me) started with using an Arduion Uno with the `SoftwareSerial.h` library to communicate.
 
-This repo has two sections, the python one and the arduino one. The python code is essential. Complete details may be found at https://www.waveshare.com/wiki/Bus_Servo_Adapter_(A), where at the bottom of the page the exact use of the python library can be found, but I have a few files that are a little bit more readable and helpful. The Arduino control code is (mostly) baremetal, with the exception of the SoftwareSerial library, because the Uno only has one UART port. 
+You can't just grab an Arduino Uno and start debugging like it's a weekend project — oh no. You need to **first drop the baud rate** and **then** control them using your microcontroller like a sane person.
 
-# Setting Up
-After installing the python library, run the "changing baud rate" code on the board. It will subseqently become much more feasible to deal with.
+---
 
-## The Python Script
-The file for this step is located in STServo_Python/STServo_Python/stservo-env/myscripts, and it's called "change_baud_rate". Scroll down, and then find the code blocked labelled "settings". For DEVICENAME, find out the COM port that you're communicating on with the adaptor board. Plug that in in the same format as the example. 
+## 🗂️ Repo Structure
 
-Now, if you're just starting out, you can set the "OLD_BAUDRATE" to 1000000, which is the default of the motor. From there, you can set the "NEW_BAUDRATE_CODE" according to what you'd like. I'd suggest 57600, corresponding to storing 0x06 in the appropriate register. Additionally, if for some reason you have a different servo ID here, you can update that.
+This repository has two major sections:
 
-After saving the file, you can run it and it should say that communication was successful. Don't worry if it says "failed to set baud rate", that's a glitch I'm still working out. (**Edit:** Turns out I was powering my board with 12V rather than the ideal voltage of 9V, which is why it kept dying. For context as to how I found out, I looked at the error byte that was sent back with the data and backtracked it using the datasheet)
+- **Python scripts** – Used for configuration and setup.
+- **Arduino code** – (Mostly) bare-metal control code for the servo.  
+  Uses `SoftwareSerial` because the Uno only has one hardware UART.
 
-## Running Some Scripts
-You can now navigate to the C folder where some basic code exists to control the motor. Your first exercise would be to ping using the Arduino IDE. If this works you can go ahead and use similar code to send whatever you'd like.
+> 📚 Refer to [Waveshare's official page](https://www.waveshare.com/wiki/Bus_Servo_Adapter_(A)) for complete technical documentation. But I'll be honest — as a beginner, and even as an ameteur, it isn't the easiest read. That's why I've added more heavily commented and readable C and Python files.
 
-# The structure of the SC/ST Series Servos
-These serial servos basically work using an internal bank of registers. To manipulate them, you need to change the values of those registers. The lookup table for the registers can be found in the folder marked "additional documents". While you might thing turning the motor is the easiest thng you can do, something more appropriate might be reading the temperature (yes this motor has a temperature sensor) from the motor.
+---
 
-Once you have all this, you can work on writing to the motor.
+## 🛠️ Getting Started
 
-## Locking a Register
-These motors have a lot of quantities you would want to change and maintain even when power is turned off (for example, the motor ID). In order to retain information even when power is lost, you need to first unlock the eeprom, write your desired data, then lock the eeprom again. I had some trouble doing this at first, but I'll update the problems I had and how I fixed them as and when I do.
+Before doing anything, **install the Python library** provided on Waveshare’s wiki. Once you download the zip folder, go to terminal and navigate there before running the `activate.bat` file in the `stservo-env\Scripts\` directory. Once you're in the "stservo-env" environment, you can navigate to the appropriate folder and run `python -m pip install -r requirements.txt`. 
+
+Once everything has been installed, you can move to the `STServo_Python/STServo_Python/stservo-env/myscripts` directory and open the script named:  
+**`change_baud_rate.py`**
+
+### 🔧 Configuring the Script
+
+Scroll down to the `"settings"` section and edit the following:
+
+- `DEVICENAME`: Set this to the COM port your USB adapter is connected to. You can find the COM port using the device manager. Use the same format as the example.
+- `OLD_BAUDRATE`: Set this to `1000000` (the factory default).
+- `NEW_BAUDRATE_CODE`: This is a magic register value.  
+  For example, `0x06` corresponds to `57600` baud. Much more manageable! For other baud rates, consult the memory tables.
+
+Optional:
+- `SERVO_ID`: If your servo ID isn't the default, update this too.
+
+### 🏃‍♂️ Running It
+
+Once you're done editing, you can save the file, and - ensuring you're still in the `(stservo-env)` environent - can run the following command (in the correct folder).
+
+```bash
+python change_baud_rate.py
+```
+
+It should say **"communication successful"**.  
+> ⚠️ Don’t worry if it throws `"failed to set baud rate"` — that's a bug I'm still working on.
+
+**(Edit:** The issue was that I powered the board with **12V** instead of the ideal **9V**, which caused the servo to misbehave. I found this by inspecting the error byte returned from the servo and tracing it back using the datasheet. Pain, but educational.)
+
+---
+
+## 🎯 First Script to Run
+
+Once the baud rate is reduced, jump over to the `C/` folder and open the **ping example** in the Arduino IDE.
+
+If the ping works — you're golden. From there, you can start issuing real commands.
+
+---
+
+## 🧠 Understanding the SC/ST Servos
+
+These serial servos operate using an **internal bank of registers**. Every operation you want to perform — from rotation to telemetry — is just a matter of reading/writing to the right register.
+
+> ✅ A full register map is available in the `additional documents/` folder.
+
+### 🥶 Example: Reading the Temperature
+
+Yes, these servos **have internal temperature sensors**. Reading the temperature is just as straightforward (or confusing) as sending a rotation command — just a different register.
+
+### 🔐 Locking & Unlocking EEPROM
+
+You’ll often want to make **persistent changes** (e.g., changing the servo ID). To do this:
+
+1. Unlock the EEPROM.
+2. Write your desired value.
+3. Lock the EEPROM again.
+
+This took me a while to get working, and I’ll keep updating the README with bugs I encounter and fixes that worked.
+
+---
+
+## 💡 Random but Useful Notes
+
+- **Uno + 1 Mbps UART = 🔥**  
+  Don’t try it unless you’re into pain. Lower the baud rate first.
+
+- **SoftwareSerial has limits**  
+  It technically supports up to 115200 baud, but pushing it higher is risky.
+
+- **Debugging sucks at 1 Mbps**  
+  Especially with a single UART. Trust me — change the baud rate.
+
+---
+
+Stay strong, servo warriors.  
+May your packets never be corrupted and your IDs always respond.
